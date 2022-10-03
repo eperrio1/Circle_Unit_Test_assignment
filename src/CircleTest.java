@@ -1,7 +1,6 @@
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,29 +15,29 @@ class CircleTest {
 
     private double[] cir = {0.0, 62.83185307179586, 628.3185307179587, 6283.185307179586, 0.0};
 
-    private ArrayList<Circle> baList;
+    private ArrayList<Circle> circleList;
 
     @org.junit.jupiter.api.BeforeEach
     void setUp() {
         // Do I need to add an assert?
-        assert (rad.length == rad.length);
+        //assert (rad.length == rad.length);
 
-        baList = new ArrayList<>();
+        circleList = new ArrayList<>();
 
         for (int ndx = 0; ndx < rad.length; ndx++){
             Circle ba = new Circle(rad[ndx]);
-            baList.add(ba);
+            circleList.add(ba);
         }
     }
 
     @org.junit.jupiter.api.AfterEach
     void tearDown() {
-        baList = null;
+        circleList = null;
     }
 
     @org.junit.jupiter.api.Test
     void testToString() {
-        for (Circle circle: baList){
+        for (Circle circle: circleList){
             System.out.println(circle);
         }
     }
@@ -46,34 +45,47 @@ class CircleTest {
 
     @org.junit.jupiter.api.Test
     void testEquals() {
-        assert(baList.size() == rad.length);
+        assert(circleList.size() == rad.length);
 
-        for(Circle circle: baList){
+        // test line 23 in circle
+        for(Circle circle: circleList){
             assertEquals(circle, circle);
         }
-        for(Circle circle : baList){
+        for(Circle circle : circleList){
             Circle shallowcopy = circle;
             assertEquals(circle, shallowcopy);
+
+            // check line 24 in circle
             Circle nullPointer = null;
             assertFalse(circle.equals(nullPointer));
             assertFalse(circle.equals("not a radius"));
         }
-        for(int ndx = 0; ndx < rad.length; ndx++){
-            Circle other_ba = new Circle(rad[ndx]);
-            assertNotSame(other_ba, baList.get(ndx));
 
-            Circle unequal_ba = new Circle(rad[ndx]);
-            assertNotSame(unequal_ba, baList.get(ndx));
+        // test line 31-36 in circle
+        for(int ndx = 0; ndx < rad.length; ndx++){
+            // makes new circle, with the same info from other circles
+            Circle other_circle = new Circle(rad[ndx]);
+            assertNotSame(other_circle, circleList.get(ndx));
+            assertEquals(other_circle, circleList.get(ndx));
+
+            // make a circle with a diff rad
+            double unequal_rad = rad[ndx] + 5;
+            Circle unequal_circle = new Circle(unequal_rad);
+            // System.out.println("unequal circle" + unequal_circle);
+            if(unequal_rad > 0){
+                assertNotEquals(unequal_circle, circleList.get(ndx));
+            }
+
 
         }
     }
 
     @org.junit.jupiter.api.Test
     void testHashCode() {
-        assert(baList.size() == rad.length);
+        assert(circleList.size() == rad.length);
 
         for(int ndx = 0; ndx < rad.length; ndx++){
-            Circle ba = baList.get(ndx);
+            Circle ba = circleList.get(ndx);
             Circle other_ba = new Circle(rad[ndx]);
             assertNotSame(other_ba, ba);
             assertEquals(other_ba.hashCode(), ba.hashCode());
@@ -82,9 +94,10 @@ class CircleTest {
 
     @org.junit.jupiter.api.Test
     void getRadius() {
-        for (int ndx = 0; ndx < baList.size(); ndx++){
-            Double the_rad = baList.get(ndx).getRadius();
-            Double exp_rad = rad[ndx] > 0 ? rad[ndx] : 0;
+        assert(circleList.size() == rad.length);
+        for (int ndx = 0; ndx < circleList.size(); ndx++){
+            Double the_rad = circleList.get(ndx).getRadius();
+            Double exp_rad = rad[ndx] >= 0 ? rad[ndx] : 0;
             assertEquals(exp_rad, the_rad);
         }
     }
@@ -92,13 +105,14 @@ class CircleTest {
 
     @Test
     void setRadius() {
-        assert (baList.size() == update_rad.length);
+        assert (circleList.size() == update_rad.length);
 
-        for (int ndx = 0; ndx < baList.size(); ndx++){
-            double current_rad = baList.get(ndx).getRadius();
-            double new_rad = update_rad[ndx];
-            Circle updated_rad = new Circle(new_rad);
-            assertNotSame(updated_rad.getRadius(), current_rad);
+        for (int ndx = 0; ndx < circleList.size(); ndx++){
+            circleList.get(ndx).setRadius(update_rad[ndx]);
+            double current_rad = circleList.get(ndx).getRadius();
+            double expected_rad = update_rad[ndx] >= 0 ? update_rad[ndx] : 0 ;
+            // Circle updated_rad = new Circle(new_rad);
+            assertEquals(expected_rad, current_rad);
 
         }
 
@@ -106,8 +120,9 @@ class CircleTest {
 
     @org.junit.jupiter.api.Test
     void getCircumference() {
-        for (int ndx = 0; ndx < baList.size(); ndx++){
-            double the_circum = baList.get(ndx).getCircumference();
+        assert(circleList.size() == cir.length);
+        for (int ndx = 0; ndx < circleList.size(); ndx++){
+            double the_circum = circleList.get(ndx).getCircumference();
             double exp_circum = cir[ndx] > 0 ? cir[ndx] :0;
             assertEquals(exp_circum, the_circum);
         }
@@ -115,8 +130,9 @@ class CircleTest {
 
     @org.junit.jupiter.api.Test
     void getArea() {
-        for (int ndx = 0; ndx < baList.size(); ndx++){
-            double the_area = baList.get(ndx).getArea();
+        assert(circleList.size() == area.length);
+        for (int ndx = 0; ndx < circleList.size(); ndx++){
+            double the_area = circleList.get(ndx).getArea();
             double exp_area = area[ndx] > 0 ? area[ndx]: 0;
             assertEquals(exp_area, the_area);
         }

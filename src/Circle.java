@@ -30,9 +30,9 @@ public class Circle {
 
         double tolerance = Math.abs(circle.radius - radius);
         if (tolerance < 0.0001) {
-            return Double.compare(tolerance, radius) == 0;
+            return true;
         }
-        return Double.compare(tolerance, radius) != 0;
+        return false;
     }
 
     @Override
