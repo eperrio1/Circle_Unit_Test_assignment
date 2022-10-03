@@ -85,10 +85,10 @@ class CircleTest {
         assert(circleList.size() == rad.length);
 
         for(int ndx = 0; ndx < rad.length; ndx++){
-            Circle ba = circleList.get(ndx);
-            Circle other_ba = new Circle(rad[ndx]);
-            assertNotSame(other_ba, ba);
-            assertEquals(other_ba.hashCode(), ba.hashCode());
+            Circle circle = circleList.get(ndx);
+            Circle other_circle = new Circle(rad[ndx]);
+            assertNotSame(other_circle, circle);
+            assertEquals(other_circle.hashCode(), circle.hashCode());
         }
     }
 
